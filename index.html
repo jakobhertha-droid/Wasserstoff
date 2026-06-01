@@ -12,6 +12,7 @@
     --green-glow: #00ff88;
     --blue-glow: #00d2ff;
     --gray-glow: #ff5e62;
+    --p2g-glow: #f59e0b; /* P2G Gold/Orange */
     --text-light: #e2e8f0;
     --text-muted: #94a3b8;
   }
@@ -30,7 +31,7 @@
   }
 
   .container {
-    max-width: 800px;
+    max-width: 860px;
     width: 100%;
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
@@ -60,18 +61,20 @@
   /* BUTTONS / TABS */
   .tabs {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     margin-bottom: 30px;
+    flex-wrap: wrap;
   }
 
   .tab {
     flex: 1;
+    min-width: 140px;
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--glass-border);
     color: var(--text-muted);
-    padding: 16px;
+    padding: 14px 10px;
     border-radius: 16px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -91,24 +94,10 @@
   .tab:hover::before { left: 100%; }
   .tab:hover { color: white; transform: translateY(-2px); }
 
-  .tab.active-green { 
-    background: rgba(0, 255, 136, 0.1); 
-    border-color: var(--green-glow); 
-    color: #fff;
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 0 10px rgba(0, 255, 136, 0.1);
-  }
-  .tab.active-blue { 
-    background: rgba(0, 210, 255, 0.1); 
-    border-color: var(--blue-glow); 
-    color: #fff;
-    box-shadow: 0 0 20px rgba(0, 210, 255, 0.2), inset 0 0 10px rgba(0, 210, 255, 0.1);
-  }
-  .tab.active-gray { 
-    background: rgba(255, 94, 98, 0.1); 
-    border-color: var(--gray-glow); 
-    color: #fff;
-    box-shadow: 0 0 20px rgba(255, 94, 98, 0.2), inset 0 0 10px rgba(255, 94, 98, 0.1);
-  }
+  .tab.active-green { background: rgba(0, 255, 136, 0.1); border-color: var(--green-glow); color: #fff; box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 0 10px rgba(0, 255, 136, 0.1); }
+  .tab.active-blue { background: rgba(0, 210, 255, 0.1); border-color: var(--blue-glow); color: #fff; box-shadow: 0 0 20px rgba(0, 210, 255, 0.2), inset 0 0 10px rgba(0, 210, 255, 0.1); }
+  .tab.active-gray { background: rgba(255, 94, 98, 0.1); border-color: var(--gray-glow); color: #fff; box-shadow: 0 0 20px rgba(255, 94, 98, 0.2), inset 0 0 10px rgba(255, 94, 98, 0.1); }
+  .tab.active-p2g { background: rgba(245, 158, 11, 0.1); border-color: var(--p2g-glow); color: #fff; box-shadow: 0 0 20px rgba(245, 158, 11, 0.2), inset 0 0 10px rgba(245, 158, 11, 0.1); }
 
   /* STAGE & ANIMATIONS */
   .stage {
@@ -122,129 +111,56 @@
     box-shadow: inset 0 10px 30px rgba(0,0,0,0.8);
   }
 
-  /* Erdschicht (Untergrund) */
   .earth-layer {
     position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 80px;
-    background: repeating-linear-gradient(
-      45deg,
-      #0f172a,
-      #0f172a 10px,
-      #1e293b 10px,
-      #1e293b 20px
-    );
-    border-top: 2px solid #334155;
-    z-index: 1;
-    opacity: 0.5;
+    bottom: 0; width: 100%; height: 80px;
+    background: repeating-linear-gradient(45deg, #0f172a, #0f172a 10px, #1e293b 10px, #1e293b 20px);
+    border-top: 2px solid #334155; z-index: 1; opacity: 0.5;
   }
 
-  /* Energiequelle */
-  .source {
-    position: absolute;
-    left: 50px;
-    bottom: 80px;
-    width: 90px;
-    height: 140px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    z-index: 3;
-  }
+  .source { position: absolute; left: 50px; bottom: 80px; width: 90px; height: 140px; display: flex; justify-content: center; align-items: flex-end; z-index: 3; }
 
-  /* Fabrik */
   .factory {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 80px;
-    width: 140px;
-    height: 110px;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-radius: 12px 12px 0 0;
-    border: 1px solid #475569;
-    border-bottom: none;
-    z-index: 4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 80px;
+    width: 140px; height: 110px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 12px 12px 0 0; border: 1px solid #475569; border-bottom: none; z-index: 4;
+    display: flex; justify-content: center; align-items: center; flex-direction: column;
     box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
   }
   
   .reactor-core {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #020617;
-    border: 2px solid #334155;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
+    width: 50px; height: 50px; border-radius: 50%; background: #020617; border: 2px solid #334155;
+    display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
   }
   .core-glow {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: absolute; width: 100%; height: 100%;
     background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.5s, background 0.5s;
+    opacity: 0; transition: opacity 0.5s, background 0.5s;
     animation: pulse 2s infinite alternate;
   }
   @keyframes pulse { 0% { transform: scale(0.8); } 100% { transform: scale(1.2); } }
 
-  .chimney {
-    position: absolute;
-    top: -50px;
-    right: 20px;
-    width: 24px;
-    height: 50px;
-    background: linear-gradient(to right, #334155, #1e293b);
-    border: 1px solid #475569;
-    border-bottom: none;
-  }
+  .chimney { position: absolute; top: -50px; right: 20px; width: 24px; height: 50px; background: linear-gradient(to right, #334155, #1e293b); border: 1px solid #475569; border-bottom: none; }
 
-  /* H2 Tank */
+  /* H2 / CH4 Tank */
   .tank {
-    position: absolute;
-    right: 50px;
-    bottom: 80px;
-    width: 70px;
-    height: 140px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 35px;
-    border: 2px solid #cbd5e1;
-    z-index: 3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-weight: 900;
-    font-size: 24px;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.1), 0 0 15px rgba(255,255,255,0.05);
-    overflow: hidden;
+    position: absolute; right: 50px; bottom: 80px; width: 70px; height: 140px;
+    background: rgba(255,255,255,0.05); border-radius: 35px; border: 2px solid #cbd5e1; z-index: 3;
+    display: flex; justify-content: center; align-items: center; color: #fff; font-weight: 900; font-size: 24px;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.1), 0 0 15px rgba(255,255,255,0.05); overflow: hidden; transition: border-color 0.5s;
   }
   
   .tank-fill {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 0%;
+    position: absolute; bottom: 0; width: 100%; height: 0%;
     background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
-    transition: height 1s ease-out;
+    transition: height 1s ease-out, background 0.5s; z-index: 1;
   }
 
-  /* H2 Bubbles in Tank */
+  .tank-text { position: relative; z-index: 5; transition: color 0.5s; }
+
   .bubble {
-    position: absolute;
-    bottom: -10px;
-    background: rgba(255,255,255,0.6);
-    border-radius: 50%;
-    animation: rise infinite ease-in;
-    opacity: 0;
+    position: absolute; bottom: -10px; background: rgba(255,255,255,0.6);
+    border-radius: 50%; animation: rise infinite ease-in; opacity: 0; z-index: 2;
   }
   @keyframes rise {
     0% { bottom: -10px; transform: translateX(0); opacity: 0; }
@@ -253,48 +169,20 @@
   }
 
   /* Rohre & Energiefluss */
-  .pipe {
-    position: absolute;
-    height: 14px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    bottom: 100px;
-    z-index: 2;
-    border-radius: 7px;
-    overflow: hidden;
-  }
+  .pipe { position: absolute; height: 14px; background: #1e293b; border: 1px solid #334155; bottom: 100px; z-index: 2; border-radius: 7px; overflow: hidden; }
   .pipe-in { left: 100px; width: calc(50% - 170px); }
   .pipe-out { right: 100px; width: calc(50% - 170px); }
   
   .pipe-down {
-    position: absolute;
-    width: 16px;
-    height: 0px;
-    background: #1e293b;
-    border-left: 1px solid #334155;
-    border-right: 1px solid #334155;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 0; /* Geht in die Erde */
-    z-index: 2;
-    transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    overflow: hidden;
+    position: absolute; width: 16px; height: 0px; background: #1e293b; border-left: 1px solid #334155; border-right: 1px solid #334155;
+    left: 50%; transform: translateX(-50%); bottom: 0; z-index: 2; transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;
   }
 
   .flow {
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%);
-    background-size: 200% 100%;
-    animation: flowAnim 1s infinite linear;
-    opacity: 0;
-    transition: opacity 0.3s;
+    width: 100%; height: 100%; background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%);
+    background-size: 200% 100%; animation: flowAnim 1s infinite linear; opacity: 0; transition: opacity 0.3s, background-image 0.5s;
   }
-  .flow-down {
-    background-image: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%);
-    background-size: 100% 200%;
-    animation: flowAnimVert 1s infinite linear;
-  }
+  .flow-down { background-image: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%); background-size: 100% 200%; animation: flowAnimVert 1s infinite linear; }
 
   @keyframes flowAnim { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
   @keyframes flowAnimVert { 0% { background-position: 0 -100%; } 100% { background-position: 0 100%; } }
@@ -307,93 +195,68 @@
   @keyframes spinAnim { 100% { transform: rotate(360deg); } }
 
   /* Rauch / CO2 */
-  .smoke-container {
-    position: absolute;
-    top: -120px;
-    right: -10px;
-    width: 60px;
-    height: 120px;
-    display: none;
-  }
+  .smoke-container { position: absolute; top: -120px; right: -10px; width: 60px; height: 120px; display: none; }
   .smoke {
-    position: absolute;
-    bottom: 0;
-    width: 35px;
-    height: 35px;
-    background: radial-gradient(circle, #94a3b8 0%, #475569 100%);
-    border-radius: 50%;
-    opacity: 0;
-    filter: blur(4px);
-    animation: smokeAnim 2s infinite ease-out;
+    position: absolute; bottom: 0; width: 35px; height: 35px; background: radial-gradient(circle, #94a3b8 0%, #475569 100%);
+    border-radius: 50%; opacity: 0; filter: blur(4px); animation: smokeAnim 2s infinite ease-out;
   }
   .smoke:nth-child(2) { animation-delay: 0.6s; left: 15px; }
   .smoke:nth-child(3) { animation-delay: 1.2s; left: -10px; }
 
-  @keyframes smokeAnim {
-    0% { transform: translateY(0) scale(0.8); opacity: 0.9; }
-    100% { transform: translateY(-100px) scale(3); opacity: 0; }
-  }
+  @keyframes smokeAnim { 0% { transform: translateY(0) scale(0.8); opacity: 0.9; } 100% { transform: translateY(-100px) scale(3); opacity: 0; } }
+  
+  /* Absorbing Smoke (P2G Mode) */
+  .smoke.absorb { animation: smokeAbsorbAnim 2s infinite ease-in; background: radial-gradient(circle, var(--p2g-glow) 0%, transparent 80%); }
+  @keyframes smokeAbsorbAnim { 0% { transform: translateY(-80px) scale(2); opacity: 0; } 100% { transform: translateY(10px) scale(0.5); opacity: 0.8; } }
 
-  /* CO2 Speicher Unten */
   .co2-storage {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 140px;
-    height: 35px;
-    background: rgba(0, 210, 255, 0.1);
-    border: 2px dashed #00d2ff;
-    border-radius: 8px;
-    color: #00d2ff;
-    font-size: 13px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    z-index: 3;
-    box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.2);
+    position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); width: 140px; height: 35px;
+    background: rgba(0, 210, 255, 0.1); border: 2px dashed #00d2ff; border-radius: 8px; color: #00d2ff;
+    font-size: 13px; font-weight: bold; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.5s ease; z-index: 3;
   }
 
   /* Info Panel & CO2 Meter */
-  .info-panel {
-    display: flex;
-    gap: 20px;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid var(--glass-border);
-    padding: 24px;
-    border-radius: 16px;
-    align-items: center;
-  }
-
-  .info-content { flex: 2; }
+  .info-panel { display: flex; gap: 20px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 24px; border-radius: 16px; align-items: stretch; min-height: 140px;}
+  .info-content { flex: 2; position: relative;}
+  
+  /* Standard Text Info */
+  .standard-info { display: block; transition: opacity 0.3s; }
   .info-title { font-size: 20px; font-weight: bold; margin-bottom: 8px; transition: color 0.3s; }
   .info-text { font-size: 15px; line-height: 1.6; color: var(--text-light); }
 
-  .co2-meter {
-    flex: 1;
-    background: #0f172a;
-    padding: 15px;
-    border-radius: 12px;
-    border: 1px solid #334155;
-    text-align: center;
-  }
+  /* P2G Interactive Dashboard */
+  .p2g-dashboard { display: none; animation: fadeIn 0.5s; width: 100%; height: 100%; flex-direction: column; justify-content: center;}
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
+  .p2g-controls { display: flex; flex-direction: column; gap: 15px; }
+  .p2g-slider-container { display: flex; align-items: center; gap: 15px; }
+  .p2g-slider-container label { font-size: 13px; font-weight: bold; color: var(--p2g-glow); width: 110px;}
+  
+  /* Custom Slider */
+  input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--p2g-glow); cursor: pointer; margin-top: -6px; box-shadow: 0 0 10px var(--p2g-glow); }
+  input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: #1e293b; border-radius: 4px; border: 1px solid #334155; }
+
+  .p2g-stats { display: flex; gap: 10px; background: #0f172a; padding: 12px; border-radius: 10px; border: 1px solid #334155; font-family: monospace; font-size: 14px;}
+  .stat-box { flex: 1; text-align: center; }
+  .stat-val { font-size: 18px; font-weight: bold; color: #fff; margin-top: 4px; }
+  .stat-val.gold { color: var(--p2g-glow); }
+
+  .co2-meter { flex: 1; background: #0f172a; padding: 15px; border-radius: 12px; border: 1px solid #334155; text-align: center; display: flex; flex-direction: column; justify-content: center;}
   .meter-label { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
   .meter-bar-bg { width: 100%; height: 12px; background: #1e293b; border-radius: 6px; overflow: hidden; position: relative; }
   .meter-bar-fill { height: 100%; width: 0%; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1), background 0.8s; }
   .meter-value { font-size: 24px; font-weight: bold; margin-top: 8px; font-variant-numeric: tabular-nums; }
 
-  @media (max-width: 600px) {
+  @media (max-width: 650px) {
     .info-panel { flex-direction: column; }
-    .tabs { flex-direction: column; gap: 10px; }
     .stage { height: 300px; }
     .source { left: 20px; transform: scale(0.8); bottom: 90px; }
     .tank { right: 20px; transform: scale(0.8); bottom: 90px; }
     .factory { transform: translateX(-50%) scale(0.8); bottom: 90px; }
     .pipe-in { left: 60px; width: calc(50% - 100px); }
     .pipe-out { right: 60px; width: calc(50% - 100px); }
+    .p2g-stats { flex-direction: column; gap: 5px; }
   }
 </style>
 </head>
@@ -401,12 +264,13 @@
 
 <div class="container">
   <h2>Wasserstoff-Produktion</h2>
-  <p class="subtitle">Interaktives Datenmodell: Kreislauf und Emissionen</p>
+  <p class="subtitle">Interaktives Datenmodell: Kreislauf, P2G und Emissionen</p>
 
   <div class="tabs">
     <div class="tab" id="tab-green" onclick="setMode('green')">🟢 Grüner H₂</div>
     <div class="tab" id="tab-blue" onclick="setMode('blue')">🔵 Blauer H₂</div>
     <div class="tab" id="tab-gray" onclick="setMode('gray')">🟤 Grauer H₂</div>
+    <div class="tab" id="tab-p2g" onclick="setMode('p2g')">🟠 Power-to-Gas</div>
   </div>
 
   <div class="stage">
@@ -417,13 +281,12 @@
       <svg class="svg-wind" id="svg-wind" viewBox="0 0 90 140">
         <defs>
           <linearGradient id="windGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#fff"/>
-            <stop offset="100%" stop-color="#94a3b8"/>
+            <stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#94a3b8"/>
           </linearGradient>
         </defs>
         <rect x="42" y="35" width="6" height="100" fill="url(#windGrad)" rx="3"/>
-        <g class="spin">
-          <circle cx="45" cy="35" r="7" fill="#00ff88" filter="drop-shadow(0 0 5px #00ff88)"/>
+        <g class="spin" id="wind-spin">
+          <circle cx="45" cy="35" r="7" fill="#00ff88" filter="drop-shadow(0 0 5px #00ff88)" id="wind-hub"/>
           <path d="M45 35 L45 0 A10 10 0 0 1 52 5 Z" fill="url(#windGrad)"/>
           <path d="M45 35 L16 52 A10 10 0 0 1 22 45 Z" fill="url(#windGrad)"/>
           <path d="M45 35 L74 52 A10 10 0 0 0 68 45 Z" fill="url(#windGrad)"/>
@@ -444,7 +307,7 @@
     <div class="factory">
       <div class="chimney">
         <div class="smoke-container" id="smoke">
-          <div class="smoke"></div><div class="smoke"></div><div class="smoke"></div>
+          <div class="smoke" id="sm1"></div><div class="smoke" id="sm2"></div><div class="smoke" id="sm3"></div>
         </div>
       </div>
       <div class="reactor-core">
@@ -452,151 +315,260 @@
       </div>
     </div>
 
-    <div class="tank">
-      H₂
+    <div class="tank" id="main-tank">
+      <span class="tank-text" id="tank-label">H₂</span>
       <div class="tank-fill" id="tank-fill"></div>
-      </div>
+    </div>
   </div>
 
   <div class="info-panel">
     <div class="info-content">
-      <div class="info-title" id="info-title">System im Ruhezustand</div>
-      <div class="info-text" id="info-text">Wähle oben eine Produktionsmethode, um die Anlage hochzufahren und die Emissionswerte zu analysieren.</div>
+      
+      <div class="standard-info" id="standard-info">
+        <div class="info-title" id="info-title">System initialisiert...</div>
+        <div class="info-text" id="info-text">Daten werden geladen.</div>
+      </div>
+
+      <div class="p2g-dashboard" id="p2g-dashboard">
+        <div class="p2g-controls">
+          <div class="p2g-slider-container">
+            <label>⚡ Windleistung:</label>
+            <input type="range" id="power-slider" min="10" max="100" value="70" oninput="updateP2GCalculations()">
+          </div>
+          
+          <div class="p2g-stats">
+            <div class="stat-box">
+              <div style="color:var(--text-muted); font-size:11px;">Schritt 1 (Elektrolyse)</div>
+              <div class="stat-val" id="val-h2">70% H₂</div>
+            </div>
+            <div class="stat-box">
+              <div style="color:var(--text-muted); font-size:11px;">CO₂ Zufuhr</div>
+              <div class="stat-val" style="color:#00d2ff;" id="val-co2">+18 kg</div>
+            </div>
+            <div class="stat-box">
+              <div style="color:var(--p2g-glow); font-size:11px; font-weight:bold;">Methan Output</div>
+              <div class="stat-val gold" id="val-ch4">38% CH₄</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="co2-meter">
       <div class="meter-label">CO₂ Emissionen</div>
       <div class="meter-bar-bg">
         <div class="meter-bar-fill" id="meter-fill"></div>
       </div>
-      <div class="meter-value" id="meter-value">--</div>
+      <div class="meter-value" id="meter-value">0%</div>
     </div>
   </div>
 </div>
 
 <script>
-  // Erzeuge H2 Bläschen im Tank
+  // DOM Elements
   const tank = document.querySelector('.tank');
+  const mainTank = document.getElementById('main-tank');
+  const tankLabel = document.getElementById('tank-label');
+  const bubbles = [];
+
+  // Bubbles erzeugen und im Array speichern (für Speed-Updates)
   for(let i=0; i<8; i++) {
     let b = document.createElement('div');
     b.className = 'bubble';
     b.style.width = Math.random() * 8 + 4 + 'px';
     b.style.height = b.style.width;
     b.style.left = Math.random() * 80 + 10 + '%';
-    b.style.animationDuration = Math.random() * 1.5 + 1.5 + 's';
     b.style.animationDelay = Math.random() * 2 + 's';
     tank.appendChild(b);
+    bubbles.push({ el: b, baseSpeed: Math.random() * 1.5 + 1.5 });
+  }
+
+  let currentMode = '';
+  let animationFrameId = null;
+  let pipeDownTimeout = null;
+
+  function resetStage() {
+    if (pipeDownTimeout) clearTimeout(pipeDownTimeout);
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+    document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
+    
+    document.getElementById('flow-in').style.opacity = '1';
+    document.getElementById('flow-out').style.opacity = '1';
+    document.getElementById('pipe-down').style.height = '0px';
+    document.getElementById('storage').style.opacity = '0';
+    document.getElementById('flow-down').style.opacity = '0';
+    document.getElementById('tank-fill').style.height = '60%';
+    
+    // Smoke Reset
+    document.getElementById('smoke').style.display = 'none';
+    ['sm1','sm2','sm3'].forEach(id => document.getElementById(id).className = 'smoke');
+
+    // UI Reset
+    document.getElementById('standard-info').style.display = 'block';
+    document.getElementById('p2g-dashboard').style.display = 'none';
+    mainTank.style.borderColor = '#cbd5e1';
+    tankLabel.style.color = '#fff';
+    tankLabel.textContent = 'H₂';
+
+    // Animations Reset (für P2G Slider)
+    document.getElementById('flow-in').style.animationDuration = '1s';
+    document.getElementById('flow-out').style.animationDuration = '1s';
+    document.getElementById('wind-spin').style.animationDuration = '2.5s';
+    bubbles.forEach(b => b.el.style.animationDuration = b.baseSpeed + 's');
   }
 
   function setMode(type) {
-    // Reset Tabs
-    document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
-    
-    // DOM Elements
+    if(currentMode === type) return;
+    currentMode = type;
+    resetStage();
+
     const flowIn = document.getElementById('flow-in');
     const flowOut = document.getElementById('flow-out');
     const svgWind = document.getElementById('svg-wind');
     const svgGas = document.getElementById('svg-gas');
-    const smoke = document.getElementById('smoke');
-    const pipeDown = document.getElementById('pipe-down');
-    const flowDown = document.getElementById('flow-down');
-    const storage = document.getElementById('storage');
     const coreGlow = document.getElementById('core-glow');
-    const tankFill = document.getElementById('tank-fill');
-    
-    const infoTitle = document.getElementById('info-title');
-    const infoText = document.getElementById('info-text');
     const meterFill = document.getElementById('meter-fill');
     const meterValue = document.getElementById('meter-value');
+    const windHub = document.getElementById('wind-hub');
 
-    // Base Reset
-    flowIn.style.opacity = '1';
-    flowOut.style.opacity = '1';
-    pipeDown.style.height = '0px';
-    storage.style.opacity = '0';
-    flowDown.style.opacity = '0';
-    tankFill.style.height = '60%';
-
-    // H2 Flow out ist immer hellblau/weiß
     flowOut.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%)';
 
     if (type === 'green') {
       document.getElementById('tab-green').classList.add('active-green');
-      svgWind.style.display = 'block';
-      svgGas.style.display = 'none';
-      smoke.style.display = 'none';
+      svgWind.style.display = 'block'; svgGas.style.display = 'none';
+      windHub.setAttribute('fill', 'var(--green-glow)');
       
       flowIn.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, var(--green-glow) 50%, transparent 100%)';
-      coreGlow.style.opacity = '1';
-      coreGlow.style.background = 'radial-gradient(circle, var(--green-glow) 0%, transparent 70%)';
+      coreGlow.style.opacity = '1'; coreGlow.style.background = 'radial-gradient(circle, var(--green-glow) 0%, transparent 70%)';
       
-      infoTitle.textContent = 'Grüner Wasserstoff';
-      infoTitle.style.color = 'var(--green-glow)';
-      infoText.innerHTML = 'Wind und Sonne liefern die Energie, um Wasser per Elektrolyse zu spalten. <strong>Absolut klimaneutral.</strong> Es entsteht nur reiner Wasserstoff und Sauerstoff.';
+      document.getElementById('info-title').textContent = 'Grüner Wasserstoff';
+      document.getElementById('info-title').style.color = 'var(--green-glow)';
+      document.getElementById('info-text').innerHTML = 'Wind liefert die Energie, um Wasser per Elektrolyse zu spalten. <strong>Absolut klimaneutral.</strong> Es entsteht nur reiner Wasserstoff.';
       
-      meterFill.style.width = '0%';
-      meterFill.style.background = 'var(--green-glow)';
+      meterFill.style.width = '0%'; meterFill.style.background = 'var(--green-glow)';
       animateValue(meterValue, 0, '0 kg');
     } 
     else if (type === 'blue') {
       document.getElementById('tab-blue').classList.add('active-blue');
-      svgWind.style.display = 'none';
-      svgGas.style.display = 'block';
-      smoke.style.display = 'none';
+      svgWind.style.display = 'none'; svgGas.style.display = 'block';
       
       flowIn.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, var(--blue-glow) 50%, transparent 100%)';
-      coreGlow.style.opacity = '1';
-      coreGlow.style.background = 'radial-gradient(circle, var(--blue-glow) 0%, transparent 70%)';
+      coreGlow.style.opacity = '1'; coreGlow.style.background = 'radial-gradient(circle, var(--blue-glow) 0%, transparent 70%)';
 
-      setTimeout(() => {
-        pipeDown.style.height = '80px'; // Reicht bis in den Erdschicht-Div
-        storage.style.opacity = '1';
-        flowDown.style.opacity = '1';
-        flowDown.style.backgroundImage = 'linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%)';
+      pipeDownTimeout = setTimeout(() => {
+        document.getElementById('pipe-down').style.height = '80px';
+        document.getElementById('storage').style.opacity = '1';
+        document.getElementById('flow-down').style.opacity = '1';
+        document.getElementById('flow-down').style.backgroundImage = 'linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%)';
       }, 300);
 
-      infoTitle.textContent = 'Blauer Wasserstoff';
-      infoTitle.style.color = 'var(--blue-glow)';
-      infoText.innerHTML = 'Wird aus fossilem Erdgas hergestellt. Das entstehende CO₂ wird jedoch abgefangen und <strong>tief im Gestein gespeichert</strong> (CCS-Verfahren).';
+      document.getElementById('info-title').textContent = 'Blauer Wasserstoff';
+      document.getElementById('info-title').style.color = 'var(--blue-glow)';
+      document.getElementById('info-text').innerHTML = 'Aus Erdgas hergestellt. Das entstehende CO₂ wird jedoch abgefangen und <strong>tief im Gestein gespeichert</strong> (CCS).';
       
-      meterFill.style.width = '15%';
-      meterFill.style.background = 'var(--blue-glow)';
-      animateValue(meterValue, 15, 'ca. 1-2 kg');
+      meterFill.style.width = '15%'; meterFill.style.background = 'var(--blue-glow)';
+      animateValue(meterValue, 15, 'ca. 1 kg');
     } 
     else if (type === 'gray') {
       document.getElementById('tab-gray').classList.add('active-gray');
-      svgWind.style.display = 'none';
-      svgGas.style.display = 'block';
-      smoke.style.display = 'block';
+      svgWind.style.display = 'none'; svgGas.style.display = 'block';
+      document.getElementById('smoke').style.display = 'block';
 
       flowIn.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, var(--gray-glow) 50%, transparent 100%)';
-      coreGlow.style.opacity = '1';
-      coreGlow.style.background = 'radial-gradient(circle, var(--gray-glow) 0%, transparent 70%)';
+      coreGlow.style.opacity = '1'; coreGlow.style.background = 'radial-gradient(circle, var(--gray-glow) 0%, transparent 70%)';
 
-      infoTitle.textContent = 'Grauer Wasserstoff';
-      infoTitle.style.color = 'var(--gray-glow)';
-      infoText.innerHTML = 'Der derzeitige Standard der Industrie. Wird aus Erdgas gewonnen, aber das klimaschädliche <strong>CO₂ entweicht ungefiltert</strong> direkt in die Atmosphäre.';
+      document.getElementById('info-title').textContent = 'Grauer Wasserstoff';
+      document.getElementById('info-title').style.color = 'var(--gray-glow)';
+      document.getElementById('info-text').innerHTML = 'Wird aus Erdgas gewonnen. Das klimaschädliche <strong>CO₂ entweicht ungefiltert</strong> direkt in die Atmosphäre.';
       
-      meterFill.style.width = '100%';
-      meterFill.style.background = 'var(--gray-glow)';
+      meterFill.style.width = '100%'; meterFill.style.background = 'var(--gray-glow)';
       animateValue(meterValue, 100, 'ca. 10 kg');
+    }
+    else if (type === 'p2g') {
+      document.getElementById('tab-p2g').classList.add('active-p2g');
+      svgWind.style.display = 'block'; svgGas.style.display = 'none';
+      windHub.setAttribute('fill', 'var(--p2g-glow)');
+      
+      // UI Switch
+      document.getElementById('standard-info').style.display = 'none';
+      document.getElementById('p2g-dashboard').style.display = 'flex';
+      
+      // Visuals
+      flowIn.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, var(--green-glow) 50%, transparent 100%)';
+      flowOut.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, var(--p2g-glow) 50%, transparent 100%)';
+      coreGlow.style.opacity = '1'; coreGlow.style.background = 'radial-gradient(circle, var(--p2g-glow) 0%, transparent 70%)';
+      
+      mainTank.style.borderColor = 'var(--p2g-glow)';
+      tankLabel.style.color = 'var(--p2g-glow)';
+      tankLabel.textContent = 'CH₄';
+
+      // CO2 "Ansaugen" (Smoke reverse)
+      document.getElementById('smoke').style.display = 'block';
+      ['sm1','sm2','sm3'].forEach(id => document.getElementById(id).classList.add('absorb'));
+
+      meterFill.style.width = '0%'; meterFill.style.background = 'var(--p2g-glow)';
+      animateValue(meterValue, 0, 'Kreislauf');
+
+      // Init calculations
+      updateP2GCalculations();
     }
   }
 
-  // Kleine Funktion, um die Zahl im Tacho hochzuzählen
+  function updateP2GCalculations() {
+    if(currentMode !== 'p2g') return;
+    
+    const power = parseInt(document.getElementById('power-slider').value);
+    
+    // Chemie/Wirkungsgrad Mathematik (vereinfacht für Simulation)
+    // Elektrolyse: ca. 70% Effizienz
+    const h2Prod = power * 0.7; 
+    // Methanisierung: nochmal ca. 80% vom H2 (Gesamt ~55%)
+    const ch4Prod = h2Prod * 0.8;
+    // Benötigtes CO2 (stöchiometrisch vereinfacht)
+    const co2Need = ch4Prod * 0.5;
+
+    // UI Update
+    document.getElementById('val-h2').textContent = h2Prod.toFixed(0) + ' % H₂';
+    document.getElementById('val-co2').textContent = '+' + co2Need.toFixed(0) + ' kg';
+    document.getElementById('val-ch4').textContent = ch4Prod.toFixed(0) + ' % CH₄';
+    
+    // Tank Füllstand visuell an CH4 Output koppeln
+    document.getElementById('tank-fill').style.height = ch4Prod + '%';
+
+    // Animations-Geschwindigkeiten anpassen (mehr Power = schneller)
+    // Speed-Faktor: 100 power = sehr schnell (0.5s), 10 power = langsam (3s)
+    const speedFactor = 2 - (power / 100) * 1.5; 
+    
+    document.getElementById('flow-in').style.animationDuration = speedFactor + 's';
+    document.getElementById('flow-out').style.animationDuration = speedFactor + 's';
+    document.getElementById('wind-spin').style.animationDuration = (speedFactor * 2.5) + 's';
+    
+    bubbles.forEach(b => {
+      b.el.style.animationDuration = (b.baseSpeed * speedFactor) + 's';
+    });
+  }
+
   function animateValue(obj, end, suffix) {
     let startTimestamp = null;
     const duration = 800;
+    
     const step = (timestamp) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
       const easeProgress = 1 - Math.pow(1 - progress, 3);
-      obj.innerHTML = Math.floor(easeProgress * end) + '% <span style="font-size:12px;color:#94a3b8;display:block;margin-top:2px;">pro kg H₂: ' + suffix + ' CO₂</span>';
+      
+      obj.innerHTML = Math.floor(easeProgress * end) + '% <span style="font-size:12px;color:#94a3b8;display:block;margin-top:2px;">' + (suffix === 'Kreislauf' ? 'Geschlossener CO₂ Kreislauf' : 'pro kg Gas: ' + suffix + ' CO₂') + '</span>';
+      
       if (progress < 1) {
-        window.requestAnimationFrame(step);
+        animationFrameId = window.requestAnimationFrame(step);
       }
     };
-    window.requestAnimationFrame(step);
+    animationFrameId = window.requestAnimationFrame(step);
   }
+
+  // Start
+  window.onload = () => { setTimeout(() => { setMode('p2g'); }, 200); };
 </script>
 
 </body>
