@@ -3,762 +3,601 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grüner Wasserstoff</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>Wasserstoff - Premium Simulation</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --green-deep: #0a3d1f;
-    --green-mid: #1a6632;
-    --green-bright: #2ea84f;
-    --green-light: #6fcf87;
-    --green-pale: #d4f4dc;
-    --sky-blue: #4dc9e6;
-    --water-blue: #1a8fcf;
-    --sun-gold: #f9c923;
-    --sun-warm: #f47c20;
-    --bg: #060f09;
-    --bg2: #0d1f12;
-    --bg3: #122518;
-    --text: #e8f5ec;
-    --text-muted: #7ab88a;
-    --border: rgba(46,168,79,0.18);
+    --bg-main: #050b14;
+    --glass-bg: rgba(20, 30, 48, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --green-glow: #00ff88;
+    --blue-glow: #00d2ff;
+    --gray-glow: #ff5e62;
+    --text-light: #e2e8f0;
+    --text-muted: #94a3b8;
   }
 
   body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-main);
+    background-image: radial-gradient(circle at 50% 0%, #112240 0%, #050b14 70%);
+    color: var(--text-light);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
     min-height: 100vh;
-    overflow-x: hidden;
+    box-sizing: border-box;
   }
 
-  /* Background grid */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(46,168,79,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(46,168,79,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
+  .container {
+    max-width: 800px;
+    width: 100%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
   }
 
-  .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 48px 32px; }
-
-  /* Hero */
-  .hero { text-align: center; margin-bottom: 72px; }
-  .hero-tag {
-    display: inline-block;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--green-bright);
-    border: 1px solid rgba(46,168,79,0.35);
-    padding: 6px 16px;
-    border-radius: 100px;
-    margin-bottom: 24px;
-    animation: fadeSlideUp 0.6s ease both;
-  }
-  .hero h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(42px, 7vw, 80px);
-    font-weight: 700;
-    line-height: 1.05;
-    animation: fadeSlideUp 0.7s ease 0.1s both;
-  }
-  .hero h1 span { color: var(--green-bright); }
-  .hero-sub {
-    font-size: 17px;
-    color: var(--text-muted);
-    margin-top: 16px;
-    font-weight: 300;
-    animation: fadeSlideUp 0.7s ease 0.2s both;
-  }
-
-  /* Molecule animation */
-  .molecule-wrap {
-    width: 100px; height: 100px;
-    margin: 32px auto;
-    animation: fadeSlideUp 0.7s ease 0.15s both;
-  }
-
-  /* Stats row */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 56px;
-    animation: fadeSlideUp 0.7s ease 0.3s both;
-  }
-  .stat-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px 24px;
+  h2 {
     text-align: center;
-    transition: border-color 0.3s, transform 0.3s;
-    cursor: default;
-  }
-  .stat-card:hover {
-    border-color: rgba(46,168,79,0.5);
-    transform: translateY(-4px);
-  }
-  .stat-num {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 42px;
-    font-weight: 700;
-    color: var(--green-bright);
-    line-height: 1;
-  }
-  .stat-num .unit { font-size: 20px; font-weight: 400; color: var(--green-light); }
-  .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
-
-  /* Section titles */
-  .section-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--green-light);
-    margin-bottom: 24px;
+    margin: 0 0 5px 0;
+    font-size: 28px;
+    background: linear-gradient(to right, #fff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  /* Process flow */
-  .process-section { margin-bottom: 64px; }
-  .process-flow {
-    display: flex;
-    align-items: stretch;
-    gap: 0;
-    overflow-x: auto;
-    padding-bottom: 8px;
-  }
-  .process-step {
-    flex: 1;
-    min-width: 160px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px 20px;
-    position: relative;
-    transition: border-color 0.3s, background 0.3s;
-    cursor: pointer;
-  }
-  .process-step:hover {
-    border-color: var(--green-bright);
-    background: var(--bg3);
-  }
-  .process-step + .process-step { margin-left: 12px; }
-  .step-icon {
-    width: 44px; height: 44px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 14px;
-    font-size: 22px;
-  }
-  .step-num {
-    position: absolute;
-    top: 14px; right: 16px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
+  p.subtitle {
+    text-align: center;
     color: var(--text-muted);
-    opacity: 0.5;
-  }
-  .step-title {
-    font-family: 'Space Grotesk', sans-serif;
     font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 6px;
+    margin-bottom: 30px;
   }
-  .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
-  .step-arrow {
-    position: absolute;
-    right: -22px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--green-bright);
-    font-size: 18px;
-    z-index: 2;
-    pointer-events: none;
-  }
-  .process-step:last-child .step-arrow { display: none; }
 
-  /* Electrolysis interactive */
-  .elec-section { margin-bottom: 64px; }
-  .elec-container {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    align-items: center;
-  }
-  .elec-viz { position: relative; height: 280px; }
-  .elec-info { }
-  .elec-info h3 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 22px; font-weight: 700;
-    margin-bottom: 12px;
-  }
-  .elec-info p { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
-  .formula-box {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 16px;
+  /* BUTTONS / TABS */
+  .tabs {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    gap: 15px;
+    margin-bottom: 30px;
   }
-  .formula-box .arrow-eq { color: var(--green-bright); }
-  .slider-wrap {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 8px;
-  }
-  .slider-wrap label { font-size: 13px; color: var(--text-muted); min-width: 100px; }
-  input[type=range] {
-    flex: 1;
-    appearance: none;
-    height: 4px;
-    background: var(--border);
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    appearance: none;
-    width: 18px; height: 18px;
-    background: var(--green-bright);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-  .slider-val {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--green-light);
-    min-width: 40px;
-    text-align: right;
-  }
-  .output-rate {
-    background: var(--bg3);
-    border-radius: 10px;
-    padding: 12px 16px;
-    margin-top: 16px;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-  .output-rate strong { color: var(--text); font-weight: 600; }
 
-  /* Applications grid */
-  .apps-section { margin-bottom: 64px; }
-  .apps-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  .app-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
+  .tab {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    padding: 16px;
     border-radius: 16px;
-    padding: 28px 22px;
-    transition: border-color 0.3s, transform 0.3s;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
     position: relative;
     overflow: hidden;
   }
-  .app-card::before {
+
+  .tab::before {
     content: '';
     position: absolute;
-    inset: 0;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: all 0.5s;
+  }
+
+  .tab:hover::before { left: 100%; }
+  .tab:hover { color: white; transform: translateY(-2px); }
+
+  .tab.active-green { 
+    background: rgba(0, 255, 136, 0.1); 
+    border-color: var(--green-glow); 
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 0 10px rgba(0, 255, 136, 0.1);
+  }
+  .tab.active-blue { 
+    background: rgba(0, 210, 255, 0.1); 
+    border-color: var(--blue-glow); 
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0, 210, 255, 0.2), inset 0 0 10px rgba(0, 210, 255, 0.1);
+  }
+  .tab.active-gray { 
+    background: rgba(255, 94, 98, 0.1); 
+    border-color: var(--gray-glow); 
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255, 94, 98, 0.2), inset 0 0 10px rgba(255, 94, 98, 0.1);
+  }
+
+  /* STAGE & ANIMATIONS */
+  .stage {
+    position: relative;
+    height: 380px;
+    background: #020617;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    overflow: hidden;
+    margin-bottom: 25px;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.8);
+  }
+
+  /* Erdschicht (Untergrund) */
+  .earth-layer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    background: repeating-linear-gradient(
+      45deg,
+      #0f172a,
+      #0f172a 10px,
+      #1e293b 10px,
+      #1e293b 20px
+    );
+    border-top: 2px solid #334155;
+    z-index: 1;
+    opacity: 0.5;
+  }
+
+  /* Energiequelle */
+  .source {
+    position: absolute;
+    left: 50px;
+    bottom: 80px;
+    width: 90px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 3;
+  }
+
+  /* Fabrik */
+  .factory {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 80px;
+    width: 140px;
+    height: 110px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 12px 12px 0 0;
+    border: 1px solid #475569;
+    border-bottom: none;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+  }
+  
+  .reactor-core {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #020617;
+    border: 2px solid #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .core-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s, background 0.5s;
+    animation: pulse 2s infinite alternate;
+  }
+  @keyframes pulse { 0% { transform: scale(0.8); } 100% { transform: scale(1.2); } }
+
+  .chimney {
+    position: absolute;
+    top: -50px;
+    right: 20px;
+    width: 24px;
+    height: 50px;
+    background: linear-gradient(to right, #334155, #1e293b);
+    border: 1px solid #475569;
+    border-bottom: none;
+  }
+
+  /* H2 Tank */
+  .tank {
+    position: absolute;
+    right: 50px;
+    bottom: 80px;
+    width: 70px;
+    height: 140px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 35px;
+    border: 2px solid #cbd5e1;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: 900;
+    font-size: 24px;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.1), 0 0 15px rgba(255,255,255,0.05);
+    overflow: hidden;
+  }
+  
+  .tank-fill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
+    transition: height 1s ease-out;
+  }
+
+  /* H2 Bubbles in Tank */
+  .bubble {
+    position: absolute;
+    bottom: -10px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    animation: rise infinite ease-in;
+    opacity: 0;
+  }
+  @keyframes rise {
+    0% { bottom: -10px; transform: translateX(0); opacity: 0; }
+    20% { opacity: 1; }
+    100% { bottom: 100%; transform: translateX(-10px); opacity: 0; }
+  }
+
+  /* Rohre & Energiefluss */
+  .pipe {
+    position: absolute;
+    height: 14px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    bottom: 100px;
+    z-index: 2;
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  .pipe-in { left: 100px; width: calc(50% - 170px); }
+  .pipe-out { right: 100px; width: calc(50% - 170px); }
+  
+  .pipe-down {
+    position: absolute;
+    width: 16px;
+    height: 0px;
+    background: #1e293b;
+    border-left: 1px solid #334155;
+    border-right: 1px solid #334155;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0; /* Geht in die Erde */
+    z-index: 2;
+    transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+  }
+
+  .flow {
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: flowAnim 1s infinite linear;
     opacity: 0;
     transition: opacity 0.3s;
-    border-radius: inherit;
   }
-  .app-card:hover { transform: translateY(-4px); }
-  .app-card:hover::before { opacity: 1; }
-  .app-card.transport::before { background: radial-gradient(circle at 20% 20%, rgba(77,201,230,0.07), transparent 60%); }
-  .app-card.industry::before { background: radial-gradient(circle at 20% 20%, rgba(249,201,35,0.07), transparent 60%); }
-  .app-card.energy::before { background: radial-gradient(circle at 20% 20%, rgba(46,168,79,0.07), transparent 60%); }
-  .app-card:hover { border-color: rgba(46,168,79,0.45); }
+  .flow-down {
+    background-image: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%);
+    background-size: 100% 200%;
+    animation: flowAnimVert 1s infinite linear;
+  }
 
-  .app-icon { font-size: 32px; margin-bottom: 16px; }
-  .app-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  .app-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
-  .app-tag {
-    display: inline-block;
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 100px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-  }
-  .tag-sky { background: rgba(77,201,230,0.12); color: var(--sky-blue); border: 1px solid rgba(77,201,230,0.2); }
-  .tag-gold { background: rgba(249,201,35,0.12); color: var(--sun-gold); border: 1px solid rgba(249,201,35,0.2); }
-  .tag-green { background: rgba(46,168,79,0.12); color: var(--green-bright); border: 1px solid rgba(46,168,79,0.2); }
+  @keyframes flowAnim { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+  @keyframes flowAnimVert { 0% { background-position: 0 -100%; } 100% { background-position: 0 100%; } }
 
-  /* Comparison bar */
-  .comparison-section { margin-bottom: 64px; }
-  .compare-rows { display: flex; flex-direction: column; gap: 14px; }
-  .compare-row { display: flex; align-items: center; gap: 16px; }
-  .compare-label { font-size: 13px; color: var(--text-muted); min-width: 120px; }
-  .compare-bar-wrap { flex: 1; background: var(--bg3); border-radius: 6px; height: 10px; overflow: hidden; }
-  .compare-bar {
-    height: 100%; border-radius: 6px;
-    transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-    width: 0;
+  /* SVGs */
+  .svg-wind { display: none; width: 90px; height: 140px; }
+  .svg-gas { display: none; width: 70px; height: 90px; }
+  
+  .spin { transform-origin: 45px 35px; animation: spinAnim 2.5s infinite linear; }
+  @keyframes spinAnim { 100% { transform: rotate(360deg); } }
+
+  /* Rauch / CO2 */
+  .smoke-container {
+    position: absolute;
+    top: -120px;
+    right: -10px;
+    width: 60px;
+    height: 120px;
+    display: none;
   }
-  .compare-val {
-    font-family: 'Space Grotesk', sans-serif;
+  .smoke {
+    position: absolute;
+    bottom: 0;
+    width: 35px;
+    height: 35px;
+    background: radial-gradient(circle, #94a3b8 0%, #475569 100%);
+    border-radius: 50%;
+    opacity: 0;
+    filter: blur(4px);
+    animation: smokeAnim 2s infinite ease-out;
+  }
+  .smoke:nth-child(2) { animation-delay: 0.6s; left: 15px; }
+  .smoke:nth-child(3) { animation-delay: 1.2s; left: -10px; }
+
+  @keyframes smokeAnim {
+    0% { transform: translateY(0) scale(0.8); opacity: 0.9; }
+    100% { transform: translateY(-100px) scale(3); opacity: 0; }
+  }
+
+  /* CO2 Speicher Unten */
+  .co2-storage {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 35px;
+    background: rgba(0, 210, 255, 0.1);
+    border: 2px dashed #00d2ff;
+    border-radius: 8px;
+    color: #00d2ff;
     font-size: 13px;
-    font-weight: 600;
-    min-width: 56px;
-    text-align: right;
-  }
-
-  /* Challenges */
-  .challenges-section { margin-bottom: 64px; }
-  .challenges-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .challenge-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px 22px;
+    font-weight: bold;
     display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    transition: border-color 0.3s;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 3;
+    box-shadow: inset 0 0 10px rgba(0, 210, 255, 0.2);
   }
-  .challenge-card:hover { border-color: rgba(46,168,79,0.4); }
-  .challenge-icon { font-size: 24px; flex-shrink: 0; }
-  .challenge-text h4 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 15px; font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .challenge-text p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 
-  /* Footer note */
-  .footer-note {
+  /* Info Panel & CO2 Meter */
+  .info-panel {
+    display: flex;
+    gap: 20px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    padding: 24px;
+    border-radius: 16px;
+    align-items: center;
+  }
+
+  .info-content { flex: 2; }
+  .info-title { font-size: 20px; font-weight: bold; margin-bottom: 8px; transition: color 0.3s; }
+  .info-text { font-size: 15px; line-height: 1.6; color: var(--text-light); }
+
+  .co2-meter {
+    flex: 1;
+    background: #0f172a;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #334155;
     text-align: center;
-    font-size: 12px;
-    color: var(--text-muted);
-    opacity: 0.5;
-    padding-top: 32px;
-    border-top: 1px solid var(--border);
   }
+  .meter-label { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .meter-bar-bg { width: 100%; height: 12px; background: #1e293b; border-radius: 6px; overflow: hidden; position: relative; }
+  .meter-bar-fill { height: 100%; width: 0%; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1), background 0.8s; }
+  .meter-value { font-size: 24px; font-weight: bold; margin-top: 8px; font-variant-numeric: tabular-nums; }
 
-  @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes bubbleRise {
-    0%   { opacity: 0; transform: translateY(0) scale(0.6); }
-    20%  { opacity: 1; }
-    80%  { opacity: 0.9; }
-    100% { opacity: 0; transform: translateY(-140px) scale(1); }
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-  @keyframes flow {
-    0%   { stroke-dashoffset: 0; }
-    100% { stroke-dashoffset: -200; }
-  }
-
-  /* Scroll reveal */
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  @media (max-width: 700px) {
-    .stats-row { grid-template-columns: 1fr 1fr; }
-    .apps-grid { grid-template-columns: 1fr; }
-    .elec-container { grid-template-columns: 1fr; }
-    .challenges-grid { grid-template-columns: 1fr; }
-    .process-flow { flex-direction: column; }
-    .process-step + .process-step { margin-left: 0; margin-top: 8px; }
+  @media (max-width: 600px) {
+    .info-panel { flex-direction: column; }
+    .tabs { flex-direction: column; gap: 10px; }
+    .stage { height: 300px; }
+    .source { left: 20px; transform: scale(0.8); bottom: 90px; }
+    .tank { right: 20px; transform: scale(0.8); bottom: 90px; }
+    .factory { transform: translateX(-50%) scale(0.8); bottom: 90px; }
+    .pipe-in { left: 60px; width: calc(50% - 100px); }
+    .pipe-out { right: 60px; width: calc(50% - 100px); }
   }
 </style>
 </head>
 <body>
-<div class="page">
 
-  <!-- Hero -->
-  <div class="hero">
-    <div class="hero-tag">Energie der Zukunft</div>
+<div class="container">
+  <h2>Wasserstoff-Produktion</h2>
+  <p class="subtitle">Interaktives Datenmodell: Kreislauf und Emissionen</p>
 
-    <!-- Molecule SVG animation -->
-    <div class="molecule-wrap">
-      <svg viewBox="0 0 100 100" width="100" height="100">
+  <div class="tabs">
+    <div class="tab" id="tab-green" onclick="setMode('green')">🟢 Grüner H₂</div>
+    <div class="tab" id="tab-blue" onclick="setMode('blue')">🔵 Blauer H₂</div>
+    <div class="tab" id="tab-gray" onclick="setMode('gray')">🟤 Grauer H₂</div>
+  </div>
+
+  <div class="stage">
+    <div class="earth-layer"></div>
+    <div class="co2-storage" id="storage">CO₂ Endlager</div>
+
+    <div class="source">
+      <svg class="svg-wind" id="svg-wind" viewBox="0 0 90 140">
         <defs>
-          <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <linearGradient id="windGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fff"/>
+            <stop offset="100%" stop-color="#94a3b8"/>
+          </linearGradient>
         </defs>
-        <!-- O atom center -->
-        <circle cx="50" cy="50" r="14" fill="var(--sky-blue)" opacity="0.9" filter="url(#glow)"/>
-        <text x="50" y="55" text-anchor="middle" font-family="Space Grotesk" font-size="11" font-weight="700" fill="white">O</text>
-        <!-- Bond lines -->
-        <line x1="37" y1="42" x2="22" y2="32" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-        <line x1="63" y1="42" x2="78" y2="32" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-        <!-- H atoms -->
-        <g style="animation: spin 8s linear infinite; transform-origin: 50px 50px;">
-          <circle cx="16" cy="28" r="10" fill="var(--green-bright)" opacity="0.9"/>
-          <text x="16" y="33" text-anchor="middle" font-family="Space Grotesk" font-size="9" font-weight="700" fill="white">H</text>
-          <circle cx="84" cy="28" r="10" fill="var(--green-bright)" opacity="0.9"/>
-          <text x="84" y="33" text-anchor="middle" font-family="Space Grotesk" font-size="9" font-weight="700" fill="white">H</text>
+        <rect x="42" y="35" width="6" height="100" fill="url(#windGrad)" rx="3"/>
+        <g class="spin">
+          <circle cx="45" cy="35" r="7" fill="#00ff88" filter="drop-shadow(0 0 5px #00ff88)"/>
+          <path d="M45 35 L45 0 A10 10 0 0 1 52 5 Z" fill="url(#windGrad)"/>
+          <path d="M45 35 L16 52 A10 10 0 0 1 22 45 Z" fill="url(#windGrad)"/>
+          <path d="M45 35 L74 52 A10 10 0 0 0 68 45 Z" fill="url(#windGrad)"/>
         </g>
-        <!-- H2 label -->
-        <text x="50" y="88" text-anchor="middle" font-family="Space Grotesk" font-size="10" fill="var(--text-muted)">H₂O → H₂ + O</text>
+      </svg>
+      <svg class="svg-gas" id="svg-gas" viewBox="0 0 70 90">
+        <rect x="10" y="50" width="50" height="40" fill="#334155" rx="4" stroke="#475569" stroke-width="2"/>
+        <path d="M25 50 L25 25 L45 25 L45 50" fill="none" stroke="#64748b" stroke-width="6"/>
+        <circle cx="35" cy="25" r="10" fill="#ff5e62"/>
+        <path d="M35 12 Q 42 5 35 0 Q 28 5 35 12" fill="#ff9966" filter="drop-shadow(0 0 8px #ff5e62)"/>
       </svg>
     </div>
 
-    <h1>Grüner <span>Wasserstoff</span></h1>
-    <p class="hero-sub">Der sauberste Energieträger der Welt — erzeugt aus Wasser und Sonnenlicht</p>
+    <div class="pipe pipe-in"><div class="flow" id="flow-in"></div></div>
+    <div class="pipe pipe-out"><div class="flow" id="flow-out"></div></div>
+    <div class="pipe-down" id="pipe-down"><div class="flow flow-down" id="flow-down"></div></div>
+
+    <div class="factory">
+      <div class="chimney">
+        <div class="smoke-container" id="smoke">
+          <div class="smoke"></div><div class="smoke"></div><div class="smoke"></div>
+        </div>
+      </div>
+      <div class="reactor-core">
+        <div class="core-glow" id="core-glow"></div>
+      </div>
+    </div>
+
+    <div class="tank">
+      H₂
+      <div class="tank-fill" id="tank-fill"></div>
+      </div>
   </div>
 
-  <!-- Stats -->
-  <div class="stats-row">
-    <div class="stat-card reveal">
-      <div class="stat-num"><span class="counter" data-target="0">0</span><span class="unit"> g CO₂</span></div>
-      <div class="stat-label">Emissionen bei der Nutzung</div>
+  <div class="info-panel">
+    <div class="info-content">
+      <div class="info-title" id="info-title">System im Ruhezustand</div>
+      <div class="info-text" id="info-text">Wähle oben eine Produktionsmethode, um die Anlage hochzufahren und die Emissionswerte zu analysieren.</div>
     </div>
-    <div class="stat-card reveal">
-      <div class="stat-num"><span class="counter" data-target="33">0</span><span class="unit"> kWh/kg</span></div>
-      <div class="stat-label">Energiegehalt pro Kilogramm</div>
-    </div>
-    <div class="stat-card reveal">
-      <div class="stat-num"><span class="counter" data-target="2050">0</span></div>
-      <div class="stat-label">EU-Klimaneutralitätsziel</div>
+    <div class="co2-meter">
+      <div class="meter-label">CO₂ Emissionen</div>
+      <div class="meter-bar-bg">
+        <div class="meter-bar-fill" id="meter-fill"></div>
+      </div>
+      <div class="meter-value" id="meter-value">--</div>
     </div>
   </div>
-
-  <!-- Process steps -->
-  <div class="process-section reveal">
-    <div class="section-title">— Wie entsteht grüner Wasserstoff?</div>
-    <div class="process-flow">
-
-      <div class="process-step" onclick="this.style.borderColor='var(--green-bright)'">
-        <div class="step-num">01</div>
-        <div class="step-icon" style="background:rgba(249,201,35,0.12)">☀️</div>
-        <div class="step-title">Erneuerbare Energie</div>
-        <div class="step-desc">Sonne, Wind oder Wasser erzeugen sauberen Strom ohne CO₂.</div>
-        <div class="step-arrow">›</div>
-      </div>
-
-      <div class="process-step" onclick="this.style.borderColor='var(--green-bright)'">
-        <div class="step-num">02</div>
-        <div class="step-icon" style="background:rgba(77,201,230,0.12)">⚡</div>
-        <div class="step-title">Elektrolyse</div>
-        <div class="step-desc">Strom spaltet Wasser in Wasserstoff (H₂) und Sauerstoff (O₂).</div>
-        <div class="step-arrow">›</div>
-      </div>
-
-      <div class="process-step" onclick="this.style.borderColor='var(--green-bright)'">
-        <div class="step-num">03</div>
-        <div class="step-icon" style="background:rgba(46,168,79,0.12)">🏭</div>
-        <div class="step-title">Speicherung</div>
-        <div class="step-desc">H₂ wird als Gas, Flüssigkeit oder in Metallhydriden gespeichert.</div>
-        <div class="step-arrow">›</div>
-      </div>
-
-      <div class="process-step" onclick="this.style.borderColor='var(--green-bright)'">
-        <div class="step-num">04</div>
-        <div class="step-icon" style="background:rgba(46,168,79,0.15)">🚀</div>
-        <div class="step-title">Nutzung</div>
-        <div class="step-desc">In Brennstoffzellen oder Turbinen: nur Wasser als Nebenprodukt.</div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Electrolysis interactive -->
-  <div class="elec-section reveal">
-    <div class="section-title">— Elektrolyse interaktiv</div>
-    <div class="elec-container">
-      <div class="elec-viz">
-        <svg id="elec-svg" width="100%" height="280" viewBox="0 0 340 280">
-          <defs>
-            <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#1a8fcf" stop-opacity="0.6"/>
-              <stop offset="100%" stop-color="#0a4b7a" stop-opacity="0.9"/>
-            </linearGradient>
-          </defs>
-          <!-- Tank -->
-          <rect x="40" y="40" width="260" height="200" rx="12" fill="url(#waterGrad)" stroke="rgba(77,201,230,0.4)" stroke-width="1"/>
-          <!-- Water label -->
-          <text x="170" y="160" text-anchor="middle" font-family="DM Sans" font-size="13" fill="rgba(255,255,255,0.4)">H₂O</text>
-
-          <!-- Cathode (left, H2) -->
-          <rect x="100" y="20" width="8" height="180" rx="4" fill="var(--green-bright)" opacity="0.8"/>
-          <text x="104" y="218" text-anchor="middle" font-family="Space Grotesk" font-size="11" fill="var(--green-bright)" font-weight="600">Kathode (−)</text>
-          <text x="104" y="232" text-anchor="middle" font-family="Space Grotesk" font-size="10" fill="var(--green-light)">H₂</text>
-
-          <!-- Anode (right, O2) -->
-          <rect x="232" y="20" width="8" height="180" rx="4" fill="var(--sky-blue)" opacity="0.8"/>
-          <text x="236" y="218" text-anchor="middle" font-family="Space Grotesk" font-size="11" fill="var(--sky-blue)" font-weight="600">Anode (+)</text>
-          <text x="236" y="232" text-anchor="middle" font-family="Space Grotesk" font-size="10" fill="#a0dcf0)">O₂</text>
-
-          <!-- Power source -->
-          <rect x="130" y="8" width="80" height="22" rx="6" fill="var(--bg3)" stroke="var(--sun-gold)" stroke-width="1"/>
-          <text x="170" y="23" text-anchor="middle" font-family="Space Grotesk" font-size="10" fill="var(--sun-gold)" font-weight="600">⚡ Strom</text>
-          <line x1="108" y1="20" x2="130" y2="19" stroke="var(--sun-gold)" stroke-width="1.5"/>
-          <line x1="210" y1="19" x2="240" y2="20" stroke="var(--sun-gold)" stroke-width="1.5"/>
-
-          <!-- Bubbles (rendered by JS) -->
-          <g id="bubbles"></g>
-        </svg>
-      </div>
-      <div class="elec-info">
-        <h3>Wie Elektrolyse funktioniert</h3>
-        <p>Elektrischer Strom zerlegt Wassermoleküle. An der Kathode entstehen Wasserstoffmoleküle, an der Anode Sauerstoff — vollständig emissionsfrei.</p>
-        <div class="formula-box">
-          <span>2H₂O</span>
-          <span class="arrow-eq">→</span>
-          <span style="color:var(--green-bright)">2H₂</span>
-          <span>+</span>
-          <span style="color:var(--sky-blue)">O₂</span>
-        </div>
-        <div class="slider-wrap">
-          <label>Leistung</label>
-          <input type="range" id="power-slider" min="10" max="100" value="50">
-          <span class="slider-val" id="power-val">50 %</span>
-        </div>
-        <div class="slider-wrap">
-          <label>Wirkungsgrad</label>
-          <input type="range" id="eff-slider" min="50" max="95" value="70">
-          <span class="slider-val" id="eff-val">70 %</span>
-        </div>
-        <div class="output-rate" id="output-box">
-          <strong id="h2-output">175 g/h</strong> Wasserstoff · <strong id="o2-output">1388 ml/h</strong> Sauerstoff
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Applications -->
-  <div class="apps-section reveal">
-    <div class="section-title">— Anwendungsfelder</div>
-    <div class="apps-grid">
-      <div class="app-card transport">
-        <div class="app-icon">🚂</div>
-        <div class="app-title">Mobilität & Transport</div>
-        <div class="app-desc">Brennstoffzellenfahrzeuge, Züge, Schiffe und Flugzeuge nutzen H₂ für lange Reichweiten ohne Emissionen.</div>
-        <span class="app-tag tag-sky">Null Emissionen</span>
-      </div>
-      <div class="app-card industry">
-        <div class="app-icon">🏗️</div>
-        <div class="app-title">Industrie & Chemie</div>
-        <div class="app-desc">Stahl- und Zementproduktion, Ammoniaksynthese, chemische Prozesse — überall wo fossile Brennstoffe ersetzt werden.</div>
-        <span class="app-tag tag-gold">Dekarbonisierung</span>
-      </div>
-      <div class="app-card energy">
-        <div class="app-icon">🔋</div>
-        <div class="app-title">Energiespeicher</div>
-        <div class="app-desc">Überschüssiger Wind- und Solarstrom wird gespeichert und bei Bedarf wieder freigesetzt — saisonale Speicherung möglich.</div>
-        <span class="app-tag tag-green">Power-to-X</span>
-      </div>
-      <div class="app-card transport">
-        <div class="app-icon">🏠</div>
-        <div class="app-title">Wärme & Gebäude</div>
-        <div class="app-desc">Beimischung ins Gasnetz, Brennstoffzellen für Heizung und Kraft-Wärme-Kopplung in Wohngebäuden.</div>
-        <span class="app-tag tag-sky">Wärmenetz</span>
-      </div>
-      <div class="app-card industry">
-        <div class="app-icon">✈️</div>
-        <div class="app-title">Luftfahrt</div>
-        <div class="app-desc">Grünes Kerosin aus H₂ (Power-to-Liquid) oder direkte H₂-Verbrennung für emissionsarme Flüge.</div>
-        <span class="app-tag tag-gold">E-Fuels</span>
-      </div>
-      <div class="app-card energy">
-        <div class="app-icon">⚡</div>
-        <div class="app-title">Stromerzeugung</div>
-        <div class="app-desc">H₂-Gasturbinen und stationäre Brennstoffzellen liefern Grundlaststrom als Ergänzung zu Solar und Wind.</div>
-        <span class="app-tag tag-green">Grundlast</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- CO2 comparison -->
-  <div class="comparison-section reveal">
-    <div class="section-title">— CO₂-Emissionen im Vergleich (kg CO₂ / kg H₂)</div>
-    <div class="compare-rows" id="compare-rows">
-      <div class="compare-row">
-        <div class="compare-label">Grüner H₂</div>
-        <div class="compare-bar-wrap"><div class="compare-bar" style="background:var(--green-bright)" data-width="2"></div></div>
-        <div class="compare-val" style="color:var(--green-bright)">0 kg</div>
-      </div>
-      <div class="compare-row">
-        <div class="compare-label">Blauer H₂</div>
-        <div class="compare-bar-wrap"><div class="compare-bar" style="background:var(--sky-blue)" data-width="28"></div></div>
-        <div class="compare-val" style="color:var(--sky-blue)">2–4 kg</div>
-      </div>
-      <div class="compare-row">
-        <div class="compare-label">Türkiser H₂</div>
-        <div class="compare-bar-wrap"><div class="compare-bar" style="background:#c084fc" data-width="38"></div></div>
-        <div class="compare-val" style="color:#c084fc">∼3 kg</div>
-      </div>
-      <div class="compare-row">
-        <div class="compare-label">Grauer H₂</div>
-        <div class="compare-bar-wrap"><div class="compare-bar" style="background:var(--sun-warm)" data-width="65"></div></div>
-        <div class="compare-val" style="color:var(--sun-warm)">∼9 kg</div>
-      </div>
-      <div class="compare-row">
-        <div class="compare-label">Schwarzer H₂</div>
-        <div class="compare-bar-wrap"><div class="compare-bar" style="background:#e05" data-width="100"></div></div>
-        <div class="compare-val" style="color:#e05">∼14 kg</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Challenges -->
-  <div class="challenges-section reveal">
-    <div class="section-title">— Herausforderungen</div>
-    <div class="challenges-grid">
-      <div class="challenge-card">
-        <div class="challenge-icon">💰</div>
-        <div class="challenge-text">
-          <h4>Produktionskosten</h4>
-          <p>Grüner H₂ kostet derzeit 3–8 €/kg — fossiler Wasserstoff nur 1–2 €/kg. Skaleneffekte und günstigerer Strom sollen die Kosten bis 2030 drastisch senken.</p>
-        </div>
-      </div>
-      <div class="challenge-card">
-        <div class="challenge-icon">🏗️</div>
-        <div class="challenge-text">
-          <h4>Infrastruktur</h4>
-          <p>Pipelines, Tankstellen und Speicheranlagen müssen neu gebaut oder umgerüstet werden. Deutschland plant ein 9.700-km-Wasserstoffnetz bis 2032.</p>
-        </div>
-      </div>
-      <div class="challenge-card">
-        <div class="challenge-icon">🔬</div>
-        <div class="challenge-text">
-          <h4>Wirkungsgrad</h4>
-          <p>Der Gesamtwirkungsgrad (Strom → H₂ → Strom) liegt bei ca. 25–35 %, verglichen mit ~90 % bei direkter Stromspeicherung. Forschung verbessert dies laufend.</p>
-        </div>
-      </div>
-      <div class="challenge-card">
-        <div class="challenge-icon">⚗️</div>
-        <div class="challenge-text">
-          <h4>Speicherung & Transport</h4>
-          <p>H₂ ist das leichteste Gas — bei hohem Druck (700 bar) oder in flüssiger Form (−253 °C) zu speichern. Neue Materialien und Ammoniak als Träger bieten Lösungen.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer-note">Informationsgrafik zu grünem Wasserstoff · Daten: IEA, Fraunhofer ISE, BMBF 2024</div>
 </div>
 
 <script>
-// Counter animation
-function animateCounters() {
-  document.querySelectorAll('.counter').forEach(el => {
-    const target = +el.dataset.target;
-    const duration = target > 1000 ? 2000 : 1000;
-    const start = performance.now();
-    function update(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target);
-      if (progress < 1) requestAnimationFrame(update);
-    }
-    requestAnimationFrame(update);
-  });
-}
+  // Erzeuge H2 Bläschen im Tank
+  const tank = document.querySelector('.tank');
+  for(let i=0; i<8; i++) {
+    let b = document.createElement('div');
+    b.className = 'bubble';
+    b.style.width = Math.random() * 8 + 4 + 'px';
+    b.style.height = b.style.width;
+    b.style.left = Math.random() * 80 + 10 + '%';
+    b.style.animationDuration = Math.random() * 1.5 + 1.5 + 's';
+    b.style.animationDelay = Math.random() * 2 + 's';
+    tank.appendChild(b);
+  }
 
-// Scroll reveal
-const revealEls = document.querySelectorAll('.reveal');
-const revealObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      // Trigger bar animations
-      e.target.querySelectorAll('.compare-bar').forEach(bar => {
-        setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, 200);
-      });
-    }
-  });
-}, { threshold: 0.15 });
-revealEls.forEach(el => revealObs.observe(el));
-animateCounters();
+  function setMode(type) {
+    // Reset Tabs
+    document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
+    
+    // DOM Elements
+    const flowIn = document.getElementById('flow-in');
+    const flowOut = document.getElementById('flow-out');
+    const svgWind = document.getElementById('svg-wind');
+    const svgGas = document.getElementById('svg-gas');
+    const smoke = document.getElementById('smoke');
+    const pipeDown = document.getElementById('pipe-down');
+    const flowDown = document.getElementById('flow-down');
+    const storage = document.getElementById('storage');
+    const coreGlow = document.getElementById('core-glow');
+    const tankFill = document.getElementById('tank-fill');
+    
+    const infoTitle = document.getElementById('info-title');
+    const infoText = document.getElementById('info-text');
+    const meterFill = document.getElementById('meter-fill');
+    const meterValue = document.getElementById('meter-value');
 
-// Bubble animation
-const bubblesGroup = document.getElementById('bubbles');
-let powerVal = 50, effVal = 70;
+    // Base Reset
+    flowIn.style.opacity = '1';
+    flowOut.style.opacity = '1';
+    pipeDown.style.height = '0px';
+    storage.style.opacity = '0';
+    flowDown.style.opacity = '0';
+    tankFill.style.height = '60%';
 
-function spawnBubble() {
-  const rate = powerVal / 100;
-  const delay = Math.max(100, 800 - powerVal * 6);
-  if (Math.random() < rate) {
-    // H2 bubble (cathode)
-    const b1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    const x1 = 90 + Math.random() * 20;
-    b1.setAttribute('cx', x1);
-    b1.setAttribute('cy', 200);
-    b1.setAttribute('r', 3 + Math.random() * 4);
-    b1.setAttribute('fill', 'rgba(46,168,79,0.7)');
-    b1.style.animation = `bubbleRise ${0.8 + Math.random() * 0.8}s ease-out both`;
-    bubblesGroup.appendChild(b1);
-    setTimeout(() => b1.remove(), 1800);
+    // H2 Flow out ist immer hellblau/weiß
+    flowOut.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%)';
 
-    // O2 bubble (anode) — less frequent
-    if (Math.random() < 0.5) {
-      const b2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      const x2 = 222 + Math.random() * 18;
-      b2.setAttribute('cx', x2);
-      b2.setAttribute('cy', 200);
-      b2.setAttribute('r', 4 + Math.random() * 5);
-      b2.setAttribute('fill', 'rgba(77,201,230,0.6)');
-      b2.style.animation = `bubbleRise ${1 + Math.random() * 0.8}s ease-out both`;
-      bubblesGroup.appendChild(b2);
-      setTimeout(() => b2.remove(), 1800);
+    if (type === 'green') {
+      document.getElementById('tab-green').classList.add('active-green');
+      svgWind.style.display = 'block';
+      svgGas.style.display = 'none';
+      smoke.style.display = 'none';
+      
+      flowIn.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, var(--green-glow) 50%, transparent 100%)';
+      coreGlow.style.opacity = '1';
+      coreGlow.style.background = 'radial-gradient(circle, var(--green-glow) 0%, transparent 70%)';
+      
+      infoTitle.textContent = 'Grüner Wasserstoff';
+      infoTitle.style.color = 'var(--green-glow)';
+      infoText.innerHTML = 'Wind und Sonne liefern die Energie, um Wasser per Elektrolyse zu spalten. <strong>Absolut klimaneutral.</strong> Es entsteht nur reiner Wasserstoff und Sauerstoff.';
+      
+      meterFill.style.width = '0%';
+      meterFill.style.background = 'var(--green-glow)';
+      animateValue(meterValue, 0, '0 kg');
+    } 
+    else if (type === 'blue') {
+      document.getElementById('tab-blue').classList.add('active-blue');
+      svgWind.style.display = 'none';
+      svgGas.style.display = 'block';
+      smoke.style.display = 'none';
+      
+      flowIn.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, var(--blue-glow) 50%, transparent 100%)';
+      coreGlow.style.opacity = '1';
+      coreGlow.style.background = 'radial-gradient(circle, var(--blue-glow) 0%, transparent 70%)';
+
+      setTimeout(() => {
+        pipeDown.style.height = '80px'; // Reicht bis in den Erdschicht-Div
+        storage.style.opacity = '1';
+        flowDown.style.opacity = '1';
+        flowDown.style.backgroundImage = 'linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%)';
+      }, 300);
+
+      infoTitle.textContent = 'Blauer Wasserstoff';
+      infoTitle.style.color = 'var(--blue-glow)';
+      infoText.innerHTML = 'Wird aus fossilem Erdgas hergestellt. Das entstehende CO₂ wird jedoch abgefangen und <strong>tief im Gestein gespeichert</strong> (CCS-Verfahren).';
+      
+      meterFill.style.width = '15%';
+      meterFill.style.background = 'var(--blue-glow)';
+      animateValue(meterValue, 15, 'ca. 1-2 kg');
+    } 
+    else if (type === 'gray') {
+      document.getElementById('tab-gray').classList.add('active-gray');
+      svgWind.style.display = 'none';
+      svgGas.style.display = 'block';
+      smoke.style.display = 'block';
+
+      flowIn.style.backgroundImage = 'linear-gradient(90deg, transparent 0%, var(--gray-glow) 50%, transparent 100%)';
+      coreGlow.style.opacity = '1';
+      coreGlow.style.background = 'radial-gradient(circle, var(--gray-glow) 0%, transparent 70%)';
+
+      infoTitle.textContent = 'Grauer Wasserstoff';
+      infoTitle.style.color = 'var(--gray-glow)';
+      infoText.innerHTML = 'Der derzeitige Standard der Industrie. Wird aus Erdgas gewonnen, aber das klimaschädliche <strong>CO₂ entweicht ungefiltert</strong> direkt in die Atmosphäre.';
+      
+      meterFill.style.width = '100%';
+      meterFill.style.background = 'var(--gray-glow)';
+      animateValue(meterValue, 100, 'ca. 10 kg');
     }
   }
-  setTimeout(spawnBubble, delay + Math.random() * 300);
-}
-spawnBubble();
 
-// Sliders
-function updateOutput() {
-  const h2Rate = Math.round((powerVal / 100) * (effVal / 100) * 500);
-  const o2Rate = Math.round(h2Rate * 7.94);
-  document.getElementById('h2-output').textContent = h2Rate + ' g/h';
-  document.getElementById('o2-output').textContent = o2Rate + ' ml/h';
-}
-
-document.getElementById('power-slider').addEventListener('input', e => {
-  powerVal = +e.target.value;
-  document.getElementById('power-val').textContent = powerVal + ' %';
-  updateOutput();
-});
-document.getElementById('eff-slider').addEventListener('input', e => {
-  effVal = +e.target.value;
-  document.getElementById('eff-val').textContent = effVal + ' %';
-  updateOutput();
-});
-updateOutput();
+  // Kleine Funktion, um die Zahl im Tacho hochzuzählen
+  function animateValue(obj, end, suffix) {
+    let startTimestamp = null;
+    const duration = 800;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      obj.innerHTML = Math.floor(easeProgress * end) + '% <span style="font-size:12px;color:#94a3b8;display:block;margin-top:2px;">pro kg H₂: ' + suffix + ' CO₂</span>';
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }
 </script>
+
 </body>
 </html>
